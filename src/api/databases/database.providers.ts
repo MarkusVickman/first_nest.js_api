@@ -15,7 +15,7 @@ export const databaseProviders = [
         entities: [
             __dirname + '/../**/*.entity{.ts,.js}',
         ],
-        synchronize: false, //ändra om jag vill att tabell ska skapas automatiskt vid uppstart
+        synchronize: false, //ändra om jag vill att tabell ska skapas automatiskt vid uppstartd
       });
 
       return dataSource.initialize();

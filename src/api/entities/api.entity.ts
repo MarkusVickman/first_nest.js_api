@@ -17,6 +17,6 @@ export class Api {
   @Column('int')
   rep: number;
 
-  @Column()
+  @Column({ default: false })
   isCompleted: boolean;
 }

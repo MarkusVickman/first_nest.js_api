@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { CreateApiDto } from './dto/create-api.dto';
 import { UpdateApiDto } from './dto/update-api.dto';
@@ -8,8 +8,8 @@ export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 
   @Post()
-  create(@Body() createApiDto: CreateApiDto) {
-    return this.apiService.create(createApiDto);
+  create(@Body() message: CreateApiDto) {
+    return this.apiService.create(message);
   }
 
   @Get()
@@ -22,9 +22,9 @@ export class ApiController {
     return this.apiService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateApiDto: UpdateApiDto) {
-    return this.apiService.update(+id, updateApiDto);
+  @Put(':id')
+  update(@Param('id') id: string, @Body() message: UpdateApiDto) {
+    return this.apiService.update(+id, message);
   }
 
   @Delete(':id')

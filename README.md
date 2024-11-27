@@ -1,99 +1,91 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Nest.JS API
+Repot innehåller en Nest.Js backend med en CRUD api som ansluter till en MySql-databas. Apin är publicerad i en docker-container till Google Cloud Run.
+Nest.Js kändes lite mycket först men jag lärde mig uppskatta strukturen och allt som följer med gratis när ramverket används. Modulerna för "ORM", felhantering och validering har varit klockrena och publiceringen var enkel.
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Api ändpunkt
+Eftersom att det här är en enkel api med en tabell i en databas använder jag bara en endpunkt som svarar på olika anrop. Ändpunkten finns här: [https://mackes-nest-js-api-1050979898493.europe-north1.run.app/api](https://mackes-nest-js-api-1050979898493.europe-north1.run.app/api) Det tar ungefär 10 sekunder för första svaret då jag valde att inte ha en dedikerad cpu-kärna hela tiden.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### Träningsinlägg
+Apiet hanterar planerade övningar att träna i form av träningsinlägg som kan klarmarkeras. Dessa inlägg innehåller kolumner för name, description, set, rep, isCompleted samt ett autogenererat id för identifiering. POST och put måste följa standarden för dessa för att skapa nya inlägg eller redigera inlägg. Specifikationer:
 
-## Description
-test
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+|                         | Api                                      |              |
+|-------------------------|------------------------------------------|--------------|
+|id                       |int autoincrement                         | PK           |
+|name                     |varchar(500)                              |              |
+|description              |varchar                                   |              |
+|set                      |int                                       |              |
+|rep                      |int                                       |              |
+|isCompleted              |boolean                                   |              |
 
-## Project setup
+###  
+När id krävs skickas det med som en html-parameter.
+POST kräver name, description, set och rep.
 
-```bash
-$ npm install
-```
+|Metod  |Ändpunkt        |Beskrivning                                                                                       |
+|-------|----------------|--------------------------------------------------------------------------------------------------|
+|GET    |/api/           |Hämtar alla lagrade Tränings-inlägg.                                                              |
+|GET    |/api/:ID        |Hämtar ett specifikt lagrat tränings-inlägg.                                                      |
+|POST   |/api/           |Lagrar ett nytt tränings-inlägg. Alla parametrar för tabellen skickas med utom isCompleted och id |
+|PUT    |/api/:ID        |Uppdaterar ett tränings-inlägg. Skicka med de parametrar du vill ändra.                           |
+|DELETE |/api/:ID        |Raderar ett tränings-inlägg med angivet ID.                                                       |
 
-## Compile and run the project
+## Återskapa
+Om du vill testa själv kan du klona och återskapa projektet.
+Projektet skapades med version 22.11.0.
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+### Project setup
+Installera nest.js och alla dependencies.
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+     npm install -g @nestjs/cli
+     npm install
 ```
 
-## Deployment
+Spara anslutningsinställningar till din MySql-databas i en .env i rootkatalogen enligt följande:
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+     
+        DB_HOST=din host
+        DB_PORT= din port
+        DB_USERNAME=ditt användarnamn
+        DB_PASSWORD= ditt lösenord
+        DB_DATABASE= din databas
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+    
+Tabeller från /entities/.entity.ts-filerna kommer att skapas och scynkas automatiskt. Så inga tabeller behöver skapas av användaren. Dock bör synchronize ändras till false i filen database.prividers.ts efter publicering för att undvika dataförluster om scheman ändras.
+
+### Testköra lokalt
+```bash
+     npm run start
+```
+
+### Publicera
+Projektet kan publiceras med docker till vald tjänst där databas variabler från .env-filen ska sparas som enviremental secrets. Följande dockerfil(finns i repot) används vid publicering:
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+     # Use the official Node.js image as the base image
+     FROM node:22.11.0
+     
+     # Set the working directory inside the container
+     WORKDIR /usr/src/app
+     
+     # Copy package.json and package-lock.json to the working directory
+     COPY package*.json ./
+     
+     # Install the application dependencies
+     RUN npm install
+     
+     # Copy the rest of the application files
+     COPY . .
+     
+     # Build the NestJS application
+     RUN npm run build
+     
+     # Expose the application port
+     EXPOSE 3000
+     
+     # Command to run the application
+     CMD ["node", "dist/main"]
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Skapad av MARKUS VICKMAN (MAVI2302) 

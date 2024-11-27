@@ -1,6 +1,7 @@
 
 import { DataSource } from 'typeorm';
 
+//Databasanslutning till MySQL som både ansluter och tar med scheman för tabbeller! (.entity.ts)
 export const databaseProviders = [
   {
     provide: 'DATA_SOURCE',
@@ -13,7 +14,7 @@ export const databaseProviders = [
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
         entities: [
-            __dirname + '/../**/*.entity{.ts,.js}',
+          __dirname + '/../**/*.entity{.ts,.js}',
         ],
         synchronize: true,
       });
